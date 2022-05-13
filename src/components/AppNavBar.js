@@ -3,7 +3,7 @@ import React from "react";
 
 export default function AppNavBar() {
   return (
-    <AppBar>
+    <AppBar position="static">
       <Toolbar>Test toolbar</Toolbar>
     </AppBar>
   );

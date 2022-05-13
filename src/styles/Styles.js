@@ -11,6 +11,11 @@ const theme = createTheme({
         },
       },
     },
+    MuiButton: {
+      defaultProps: {
+        disableFocusRipple: true,
+      },
+    },
   },
 });
 

@@ -5,6 +5,7 @@ import {
   Avatar,
   Box,
   CardMedia,
+  Container,
   IconButton,
   Menu,
   MenuItem,
@@ -31,60 +32,62 @@ export default function AppNavBar({ authUser, setauthUser }) {
 
   return (
     <AppBar position="static">
-      <Toolbar>
-        <Box sx={{ flexGrow: 1 }}>
-          <CardMedia
-            sx={{ width: "fit-content" }}
-            component="img"
-            image="wf_logo_220x23.webp"
-          />
-        </Box>
-        {authUser && (
-          <Box>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem
-                  key={setting}
-                  component={Link}
-                  to={`/${setting}`.toLowerCase()}
-                  onClick={handleCloseUserMenu}
-                >
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-              <MenuItem
-                onClick={() => {
-                  setauthUser(null);
-                  handleCloseUserMenu();
-                  navigate("/logout");
-                }}
-              >
-                <Typography textAlign="center">Logout</Typography>
-              </MenuItem>
-            </Menu>
+      <Container maxWidth="lg" sx={{ backgroundColor: "blue" }}>
+        <Toolbar>
+          <Box sx={{ flexGrow: 1 }}>
+            <CardMedia
+              sx={{ width: "fit-content" }}
+              component="img"
+              image="wf_logo_220x23.webp"
+            />
           </Box>
-        )}
-      </Toolbar>
+          {authUser && (
+            <Box>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem
+                    key={setting}
+                    component={Link}
+                    to={`/${setting}`.toLowerCase()}
+                    onClick={handleCloseUserMenu}
+                  >
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+                <MenuItem
+                  onClick={() => {
+                    setauthUser(null);
+                    handleCloseUserMenu();
+                    navigate("/logout");
+                  }}
+                >
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          )}
+        </Toolbar>
+      </Container>
     </AppBar>
   );
 }

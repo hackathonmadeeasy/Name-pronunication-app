@@ -7,7 +7,6 @@ const theme = createTheme({
         root: {
           backgroundColor: "#d71e28",
           borderBottom: "4px solid #ffcd41",
-          height: "60px",
         },
       },
     },

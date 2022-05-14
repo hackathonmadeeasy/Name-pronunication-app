@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -7,19 +8,26 @@ import {
   Typography,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import React, { useEffect, useState } from "react";
+import { userAuth } from "../service/userAuthService";
+import { useNavigate } from "react-router-dom";
 
-export default function SignIn() {
+export default function SignIn({ setauthUser }) {
   const [value, setValue] = useState({ userName: "", password: "" });
   const [submitDisable, setsubmitDisable] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
-    setsubmitDisable(value.userName != "" && value.password != "");
+    setsubmitDisable(value.userName !== "" && value.password !== "");
   }, [value]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("I am here !");
+    try {
+      const user = await userAuth(value.userName, value.password);
+      if (user) setauthUser(user);
+      navigate("/dashboard");
+    } catch (exp) {
+      console.log(exp);
+    }
   };
 
   const onValueChange = (e) => {

@@ -12,6 +12,8 @@ export const userAuth = (userName, password) =>
 export const getAudioFile = (value) =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+      resolve(
+        "http://commondatastorage.googleapis.com/codeskulptor-assets/week7-brrring.m4a"
+      );
     }, 300);
   });

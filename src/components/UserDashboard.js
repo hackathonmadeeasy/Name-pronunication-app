@@ -27,6 +27,12 @@ export default function UserDashboard({ authUser }) {
   const [audio] = useState(new Audio());
   const [playing, setPlaying] = useState(false);
 
+  useEffect(() => {
+    audio.addEventListener("ended", (event) => {
+      setPlaying(false);
+    });
+  }, [audio]);
+
   const onValueChange = (e) => {
     setPlaying(false);
     setValue((preValue) => ({

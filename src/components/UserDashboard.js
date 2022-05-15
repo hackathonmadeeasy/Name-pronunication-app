@@ -1,4 +1,5 @@
 import {
+  IconButton,
   Container,
   FormControl,
   Grid,
@@ -8,8 +9,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
+import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
+
+import React, { useState, useEffect } from "react";
 import { Country } from "../service/utils";
+import { getAudioFile } from "../service/userAuthService";
 
 export default function UserDashboard({ authUser }) {
   const [value, setValue] = useState({
@@ -19,11 +24,27 @@ export default function UserDashboard({ authUser }) {
     country: "",
   });
 
+  const [audio] = useState(new Audio());
+  const [playing, setPlaying] = useState(false);
+
   const onValueChange = (e) => {
+    setPlaying(false);
     setValue((preValue) => ({
       ...preValue,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  useEffect(() => {
+    playing ? audio.play() : audio.pause();
+  }, [audio, playing]);
+
+  const performPlayAction = async (value) => {
+    try {
+      const urlValue = await getAudioFile(value);
+      audio.src = urlValue;
+      setPlaying(true);
+    } catch (exp) {}
   };
 
   return (
@@ -90,6 +111,18 @@ export default function UserDashboard({ authUser }) {
               ))}
             </Select>
           </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          {!playing && (
+            <IconButton color="primary" onClick={performPlayAction}>
+              <PlayCircleOutlinedIcon />
+            </IconButton>
+          )}
+          {playing && (
+            <IconButton color="primary" onClick={() => setPlaying(false)}>
+              <PauseCircleOutlineIcon />
+            </IconButton>
+          )}
         </Grid>
       </Grid>
     </Container>

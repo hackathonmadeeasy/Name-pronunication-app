@@ -32,7 +32,7 @@ export default function AppNavBar({ authUser, setauthUser }) {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="lg" sx={{ backgroundColor: "blue" }}>
+      <Container maxWidth="lg">
         <Toolbar>
           <Box sx={{ flexGrow: 1 }}>
             <CardMedia

@@ -15,6 +15,7 @@ export default function SignIn({ setauthUser }) {
   const [value, setValue] = useState({ userName: "", password: "" });
   const [submitDisable, setsubmitDisable] = useState(false);
   const navigate = useNavigate();
+
   useEffect(() => {
     setsubmitDisable(value.userName !== "" && value.password !== "");
   }, [value]);

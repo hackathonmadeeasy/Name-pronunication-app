@@ -1,5 +1,4 @@
 import {
-  IconButton,
   Container,
   FormControl,
   Grid,
@@ -8,11 +7,11 @@ import {
   Select,
   TextField,
   Typography,
+  Button,
 } from "@mui/material";
-import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
-import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
+import SendIcon from "@mui/icons-material/Send";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Country } from "../service/utils";
 import { getAudioFile } from "../service/userAuthService";
 
@@ -24,33 +23,27 @@ export default function UserDashboard({ authUser }) {
     country: "",
   });
 
-  const [audio] = useState(new Audio());
-  const [playing, setPlaying] = useState(false);
-
-  useEffect(() => {
-    audio.addEventListener("ended", (event) => {
-      setPlaying(false);
-    });
-  }, [audio]);
-
   const onValueChange = (e) => {
-    setPlaying(false);
+    loadAndPlayAudio("");
     setValue((preValue) => ({
       ...preValue,
       [e.target.name]: e.target.value,
     }));
   };
 
-  useEffect(() => {
-    playing ? audio.play() : audio.pause();
-  }, [audio, playing]);
-
   const performPlayAction = async (value) => {
     try {
       const urlValue = await getAudioFile(value);
-      audio.src = urlValue;
-      setPlaying(true);
+      loadAndPlayAudio(urlValue, true);
     } catch (exp) {}
+  };
+
+  const loadAndPlayAudio = (url, play = false) => {
+    var audio = document.getElementById("audio");
+    var source = document.getElementById("audioSource");
+    source.src = url;
+    audio.load();
+    if (play) audio.play();
   };
 
   return (
@@ -119,16 +112,28 @@ export default function UserDashboard({ authUser }) {
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
-          {!playing && (
-            <IconButton color="primary" onClick={performPlayAction}>
-              <PlayCircleOutlinedIcon />
-            </IconButton>
-          )}
-          {playing && (
-            <IconButton color="primary" onClick={() => setPlaying(false)}>
-              <PauseCircleOutlineIcon />
-            </IconButton>
-          )}
+          <Grid
+            container
+            spacing={1}
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+          >
+            <Grid item xs={12} sm={6}>
+              <Button
+                variant="contained"
+                endIcon={<SendIcon />}
+                onClick={performPlayAction}
+              >
+                Pronounce
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <audio id="audio" controls="controls">
+                <source id="audioSource" src=""></source>
+              </audio>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Container>

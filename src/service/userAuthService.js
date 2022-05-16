@@ -2,8 +2,7 @@ const defaultUser = (firstName) => ({
   firstName,
   lastName: "test last name",
   preferredName: "test prefer name",
-  country: "USA",
-  lang: "",
+  country: "en-US",
   voiceType: "",
   voiceRecordUrl:
     "http://commondatastorage.googleapis.com/codeskulptor-assets/week7-brrring.m4a",
@@ -27,11 +26,13 @@ export const userAuth = (userName, password) =>
   });
 
 export const getAudioFile = async (value) => {
+  console.log(value);
+
   let preferName = value?.preferredName
     ? value.preferredName
     : value.firstName + " " + value.lastName;
   let voiceType = value?.voiceType ? value?.voiceType : "Female";
-  let lang = value?.lang ? value?.lang : "en-US";
+  let lang = value?.country ? value?.country : "en-US";
 
   try {
     return await fetch(

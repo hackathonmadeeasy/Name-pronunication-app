@@ -38,7 +38,7 @@ export default function AppNavBar({ authUser, setauthUser }) {
             <CardMedia
               sx={{ width: "fit-content" }}
               component="img"
-              image="wf_logo_220x23.webp"
+              image="https://www17.wellsfargomedia.com/assets/images/rwd/wf_logo_220x23.png"
             />
           </Box>
           {authUser && (

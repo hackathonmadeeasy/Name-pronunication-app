@@ -1,5 +1,4 @@
 import {
-  IconButton,
   Container,
   FormControl,
   Grid,
@@ -9,44 +8,21 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
-import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
-import React, { useEffect, useState } from "react";
-import { Recorder } from "react-voice-recorder";
+
+import React, { useState } from "react";
+
 import { Country } from "../service/utils";
-import "react-voice-recorder/dist/index.css";
 
 export default function UserProfile({ authUser }) {
   const [userInfo, setuserInfo] = useState(
     JSON.parse(JSON.stringify(authUser))
   );
-  const [audio] = useState(new Audio());
-  const [playing, setPlaying] = useState(false);
-
   const onValueChange = (e) => {
-    setPlaying(false);
     setuserInfo((preValue) => ({
       ...preValue,
       [e.target.name]: e.target.value,
     }));
   };
-
-  useEffect(() => {
-    audio.addEventListener("ended", (event) => {
-      setPlaying(false);
-    });
-  }, [audio]);
-
-  const performPlayAction = () => {
-    try {
-      audio.src = authUser.voiceRecordUrl;
-      setPlaying(true);
-    } catch (exp) {}
-  };
-
-  useEffect(() => {
-    playing ? audio.play() : audio.pause();
-  }, [audio, playing]);
 
   return (
     <Container component="main" maxWidth="md" sx={{ mt: "10px" }}>
@@ -119,21 +95,26 @@ export default function UserProfile({ authUser }) {
         </Grid>
         {authUser.voiceRecordUrl && (
           <Grid item xs={12} sm={6}>
-            Pre record available :
-            {!playing && (
-              <IconButton color="primary" onClick={performPlayAction}>
-                <PlayCircleOutlinedIcon />
-              </IconButton>
-            )}
-            {playing && (
-              <IconButton color="primary" onClick={() => setPlaying(false)}>
-                <PauseCircleOutlineIcon />
-              </IconButton>
-            )}
+            <Grid
+              container
+              spacing={1}
+              direction="row"
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <Grid item xs={12} sm={6}>
+                Pronounce Existing :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <audio id="audio" controls="controls">
+                  <source id="audioSource" src=""></source>
+                </audio>
+              </Grid>
+            </Grid>
           </Grid>
         )}
       </Grid>
-      <Recorder record={true} title={"New recording"} showUIAudio />
+      <Grid item xs={12} sm={6}></Grid>
     </Container>
   );
 }

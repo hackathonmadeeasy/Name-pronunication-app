@@ -26,8 +26,6 @@ export const userAuth = (userName, password) =>
   });
 
 export const getAudioFile = async (value) => {
-  console.log(value);
-
   let preferName = value?.preferredName
     ? value.preferredName
     : value.firstName + " " + value.lastName;
@@ -47,17 +45,27 @@ export const getAudioFile = async (value) => {
         body: requestBody(preferName, lang, voiceType),
       }
     )
-      .then((res) => {
-        var reader = res.body.getReader();
-        return reader.read().then((result) => {
-          return result;
+      .then((response) => {
+        const reader = response.body.getReader();
+        return new ReadableStream({
+          start(controller) {
+            return pump();
+            function pump() {
+              return reader.read().then(({ done, value }) => {
+                if (done) {
+                  controller.close();
+                  return;
+                }
+                controller.enqueue(value);
+                return pump();
+              });
+            }
+          },
         });
       })
-      .then((data) => {
-        var blob = new Blob([data.value], { type: "audio/mpeg" });
-        var blobUrl = URL.createObjectURL(blob);
-        return blobUrl;
-      });
+      .then((stream) => new Response(stream))
+      .then((response) => response.blob())
+      .then((blob) => URL.createObjectURL(blob));
   } catch (exp) {
     throw exp;
   }

@@ -2,7 +2,7 @@ const defaultUser = (firstName) => ({
   firstName,
   lastName: "test last name",
   preferredName: "test prefer name",
-  country: "India",
+  country: "USA",
   lang: "",
   voiceType: "",
   voiceRecordUrl:

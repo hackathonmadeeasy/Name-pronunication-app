@@ -1,4 +1,4 @@
 export const Country = [
-  { key: "India", value: "India" },
-  { key: "USA", value: "us" },
+  { key: "NZ", value: "en-NZ" },
+  { key: "USA", value: "en-US" },
 ];

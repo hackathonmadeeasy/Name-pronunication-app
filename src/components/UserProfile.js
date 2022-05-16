@@ -114,7 +114,9 @@ export default function UserProfile({ authUser }) {
           </Grid>
         )}
       </Grid>
-      <Grid item xs={12} sm={6}></Grid>
+      <Grid item xs={12} sm={6}>
+        {/* Add record icon and record optin */}
+      </Grid>
     </Container>
   );
 }

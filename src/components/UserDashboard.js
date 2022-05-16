@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Country } from "../service/utils";
 import { getAudioFile } from "../service/userAuthService";
 
@@ -22,6 +22,7 @@ export default function UserDashboard({ authUser }) {
     preferredName: "",
     country: "",
   });
+  const myRef = useRef(null);
 
   const onValueChange = (e) => {
     loadAndPlayAudio("");
@@ -31,19 +32,18 @@ export default function UserDashboard({ authUser }) {
     }));
   };
 
-  const performPlayAction = async (value) => {
+  const performPlayAction = async () => {
     try {
       const urlValue = await getAudioFile(value);
       loadAndPlayAudio(urlValue, true);
-    } catch (exp) {}
+    } catch (exp) {
+      console.log(exp);
+    }
   };
 
   const loadAndPlayAudio = (url, play = false) => {
-    var audio = document.getElementById("audio");
-    var source = document.getElementById("audioSource");
-    source.src = url;
-    audio.load();
-    if (play) audio.play();
+    myRef.current.src = url;
+    if (play) myRef.current.play();
   };
 
   return (
@@ -129,9 +129,13 @@ export default function UserDashboard({ authUser }) {
               </Button>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <audio id="audio" controls="controls">
-                <source id="audioSource" src=""></source>
-              </audio>
+              <audio
+                ref={myRef}
+                id="audio"
+                controls="controls"
+                src=""
+                type="audio/mp3"
+              />
             </Grid>
           </Grid>
         </Grid>

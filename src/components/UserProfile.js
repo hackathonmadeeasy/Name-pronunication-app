@@ -11,7 +11,7 @@ import {
 
 import React, { useState } from "react";
 
-import { Country } from "../service/utils";
+import { Country, RESOUREC_URL } from "../service/utils";
 
 export default function UserProfile({ authUser }) {
   const [userInfo, setuserInfo] = useState(
@@ -107,7 +107,10 @@ export default function UserProfile({ authUser }) {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <audio id="audio" controls="controls">
-                  <source id="audioSource" src=""></source>
+                  <source
+                    id="audioSource"
+                    src={`${RESOUREC_URL}/${authUser.voiceRecordUrl}`}
+                  ></source>
                 </audio>
               </Grid>
             </Grid>

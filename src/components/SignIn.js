@@ -24,8 +24,12 @@ export default function SignIn({ setauthUser }) {
     event.preventDefault();
     try {
       const user = await userAuth(value.userName, value.password);
-      if (user) setauthUser(user);
-      navigate("/dashboard");
+      if (user) {
+        setauthUser(user);
+        navigate("/dashboard");
+      } else {
+        navigate("/logout");
+      }
     } catch (exp) {
       console.log(exp);
     }

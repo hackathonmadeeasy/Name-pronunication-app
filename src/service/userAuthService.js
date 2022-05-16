@@ -1,31 +1,62 @@
-const defaultUser = (firstName) => ({
-  firstName,
-  lastName: "test last name",
-  preferredName: "test prefer name",
+import { DataObjectSharp } from "@mui/icons-material";
+import axios from "axios";
+import { CountryVoiceName, RESOUREC_URL } from "./utils";
+
+const defaultUser = () => ({
+  firstName: "",
+  lastName: "",
+  preferredName: "",
   country: "en-US",
   voiceType: "",
-  voiceRecordUrl:
-    "http://commondatastorage.googleapis.com/codeskulptor-assets/week7-brrring.m4a",
 });
 
 const requestBody = (
   pronunciationText,
   lang,
-  voiceType
-) => `<speak version="1.0" xml:lang="en-US">
-<voice xml:lang="${lang}" xml:gender="${voiceType}" name="en-US-JennyNeural">
+  voiceType,
+  countryVoiceMapping
+) => `<speak version="1.0" xml:lang="${lang}">
+<voice xml:lang="${lang}" xml:gender="${voiceType}" name="${countryVoiceMapping}">
     ${pronunciationText}
 </voice>
 </speak>`;
 
 export const userAuth = (userName, password) =>
-  new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(defaultUser(userName));
-    }, 300);
-  });
+  axios({
+    method: "post",
+    url: `${RESOUREC_URL}/pronunciation/login`,
+    data: {
+      userName,
+      password,
+    },
+    headers: { "Content-Type": "application/json" },
+  }).then((response) => Object.assign(defaultUser(), response.data));
+
+const getPreRecordedAudio = (userName) => {
+  return axios({
+    method: "post",
+    url: `${RESOUREC_URL}/pronunciation/findPreRecordedAudio`,
+    data: {
+      userName,
+    },
+    headers: { "Content-Type": "application/json" },
+  }).then((response) => response.data);
+};
 
 export const getAudioFile = async (value) => {
+  try {
+    let preferName = value?.preferredName
+      ? value.preferredName
+      : value.firstName;
+    if (preferName) {
+      let preRecordedUrl = await getPreRecordedAudio(preferName.toLowerCase());
+      if (preRecordedUrl && preRecordedUrl?.voiceRecordUrl)
+        return `${RESOUREC_URL}/${preRecordedUrl.voiceRecordUrl}`;
+    }
+  } catch (exp) {
+    console.log(exp);
+  }
+
   let preferName = value?.preferredName
     ? value.preferredName
     : value.firstName + " " + value.lastName;
@@ -42,7 +73,7 @@ export const getAudioFile = async (value) => {
           "X-Microsoft-OutputFormat": "audio-16khz-128kbitrate-mono-mp3",
           "Ocp-Apim-Subscription-Key": "20ce7aa7f2ef4db9b5aa10361b6642a3",
         },
-        body: requestBody(preferName, lang, voiceType),
+        body: requestBody(preferName, lang, voiceType, CountryVoiceName[lang]),
       }
     )
       .then((response) => {

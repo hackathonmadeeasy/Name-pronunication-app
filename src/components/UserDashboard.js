@@ -20,7 +20,7 @@ export default function UserDashboard({ authUser }) {
     firstName: "",
     lastName: "",
     preferredName: "",
-    country: "",
+    country: "en-US",
   });
   const myRef = useRef(null);
 
@@ -34,8 +34,11 @@ export default function UserDashboard({ authUser }) {
 
   const performPlayAction = async () => {
     try {
-      const urlValue = await getAudioFile(value);
-      loadAndPlayAudio(urlValue, true);
+      if (value?.preferredName || value?.firstName || value?.lastName) {
+        const urlValue = await getAudioFile(value);
+        console.log(urlValue);
+        loadAndPlayAudio(urlValue, true);
+      }
     } catch (exp) {
       console.log(exp);
     }
@@ -125,7 +128,7 @@ export default function UserDashboard({ authUser }) {
                 endIcon={<SendIcon />}
                 onClick={performPlayAction}
               >
-                Pronounce
+                SPEAK IT
               </Button>
             </Grid>
             <Grid item xs={12} sm={6}>
